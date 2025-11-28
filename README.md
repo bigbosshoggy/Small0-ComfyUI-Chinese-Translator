@@ -29,7 +29,7 @@ This node is designed to use the system's environment variables for security.
 *   **Web/Cloud**: The API key is automatically injected via the platform.
 *   **Local ComfyUI**: Ensure you have your `GEMINI_API_KEY` set in your system environment variables or your main ComfyUI launch script. The node will detect it automatically.
 
-## Usage
+## Usage 
 
 1.  **Locate Node**: Right-click on the canvas -> `Small0` -> `Quick Translator`.
 2.  **Inputs**:
