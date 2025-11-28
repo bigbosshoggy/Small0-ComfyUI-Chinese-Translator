@@ -41,69 +41,14 @@ export const ComfyNode: React.FC = () => {
   };
 
   const pythonCode = `
+# This code is available in the __init__.py file in this repository.
+
 import os
 import google.generativeai as genai
 
 class Small0Translator:
-    def __init__(self):
-        pass
-    
-    @classmethod
-    def INPUT_TYPES(s):
-        return {
-            "required": {
-                "text": ("STRING", {"multiline": True}),
-                "checkpoint": ([
-                    "${CheckpointType.SD15}",
-                    "${CheckpointType.SDXL}",
-                    "${CheckpointType.FLUX}",
-                    "${CheckpointType.PONY}",
-                    "${CheckpointType.REALISTIC}",
-                    "${CheckpointType.ILLUSTRATION}"
-                ],),
-                "intelligence_mode": ("BOOLEAN", {"default": True}),
-            },
-        }
-
-    RETURN_TYPES = ("STRING",)
-    FUNCTION = "translate"
-    CATEGORY = "Small0/utils"
-
-    def translate(self, text, checkpoint, intelligence_mode):
-        api_key = os.environ.get("GEMINI_API_KEY")
-        if not api_key:
-            return ("Error: GEMINI_API_KEY environment variable not found.",)
-        
-        genai.configure(api_key=api_key)
-        
-        system_instruction = "You are a specialized translator for Generative AI Art prompts. Translate English to Chinese."
-        
-        if intelligence_mode:
-            system_instruction += f"""
-            Target Checkpoint: {checkpoint}
-            Guidelines:
-            1. Analyze intent.
-            2. Translate to Chinese.
-            3. Structure for specific checkpoint style (e.g., tags for Pony/Anime, natural language for SDXL).
-            Output ONLY the Chinese prompt."""
-        else:
-            system_instruction += " Translate directly. Output ONLY the translated text."
-
-        model = genai.GenerativeModel('gemini-2.0-flash', system_instruction=system_instruction)
-        
-        try:
-            response = model.generate_content(text)
-            return (response.text.strip(),)
-        except Exception as e:
-            return (f"Error: {str(e)}",)
-
-NODE_CLASS_MAPPINGS = {
-    "Small0Translator": Small0Translator
-}
-
-NODE_DISPLAY_NAME_MAPPINGS = {
-    "Small0Translator": "Small0 Quick Translator"
-}
+    # ... implementation details ...
+    pass
 `.trim();
 
   return (
@@ -116,14 +61,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
             <span className="font-bold text-sm text-white tracking-wide">Small0 Quick Translator</span>
         </div>
         <div className="flex gap-2 items-center">
-             <button 
-               onClick={() => setShowCode(true)}
-               className="text-white/50 hover:text-white transition-colors flex items-center gap-1 bg-black/20 px-2 py-0.5 rounded"
-               title="View Python Code"
-             >
-               <Code size={12} />
-               <span className="text-[9px] font-bold">PY</span>
-             </button>
              <div className="w-px h-3 bg-white/20"></div>
              <button 
                onClick={() => setShowHelp(true)}
@@ -255,36 +192,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
         <div className="absolute -left-3 top-20 w-3 h-3 rounded-full bg-neutral-600 border-2 border-neutral-800"></div>
         <div className="absolute -right-3 top-[380px] w-3 h-3 rounded-full bg-neutral-600 border-2 border-neutral-800"></div>
 
-        {/* Python Code Modal */}
-        {showCode && (
-            <div className="absolute inset-0 z-50 bg-[#121212] flex flex-col text-gray-300 font-mono text-xs">
-                 <div className="flex justify-between items-center p-3 border-b border-gray-700 bg-neutral-900">
-                    <div className="flex items-center gap-2 text-white font-bold">
-                        <Code size={14} className="text-cyan-400" />
-                        <span>__init__.py</span>
-                    </div>
-                    <div className="flex items-center gap-2">
-                         <button 
-                            onClick={copyCodeToClipboard}
-                            className={`flex items-center gap-1 px-2 py-1 rounded transition-colors ${copiedCode ? 'bg-green-600 text-white' : 'bg-white/10 hover:bg-white/20'}`}
-                         >
-                            {copiedCode ? <Check size={12}/> : <Copy size={12}/>}
-                            <span>{copiedCode ? 'Copied' : 'Copy'}</span>
-                         </button>
-                         <button onClick={() => setShowCode(false)} className="hover:text-white p-1"><X size={16} /></button>
-                    </div>
-                </div>
-                <div className="flex-1 overflow-auto p-4 bg-[#0d0d0d]">
-                    <pre className="text-green-400/90 whitespace-pre-wrap font-mono text-[10px] leading-relaxed">
-                        {pythonCode}
-                    </pre>
-                </div>
-                 <div className="p-2 border-t border-gray-700 bg-neutral-900 text-[10px] text-gray-500 text-center">
-                    Save as <code>__init__.py</code> in <code>ComfyUI/custom_nodes/small0_translator/</code>
-                </div>
-            </div>
-        )}
-
         {/* Help Modal */}
         {showHelp && (
             <div className="absolute inset-0 z-50 bg-[#121212]/95 flex flex-col text-gray-300 font-mono text-xs p-4 overflow-y-auto">
@@ -298,30 +205,21 @@ NODE_DISPLAY_NAME_MAPPINGS = {
                 
                 <div className="space-y-4">
                     <div>
-                        <h3 className="text-white font-bold mb-1">1. Get the Code</h3>
-                        <p className="opacity-80">Click the <span className="text-cyan-400 font-bold">PY</span> button in the header to view the Python source.</p>
+                        <h3 className="text-white font-bold mb-1">1. Push to Git</h3>
+                        <p className="opacity-80">This project already contains <code className="text-green-400">__init__.py</code> and <code className="text-green-400">requirements.txt</code>.</p>
+                        <p className="opacity-80 mt-1">Push all files in this directory to your GitHub repository.</p>
                     </div>
 
                     <div>
-                        <h3 className="text-white font-bold mb-1">2. Install Node</h3>
-                        <p className="opacity-80">Create a folder and file:</p>
-                        <code className="block bg-black/50 p-2 rounded mt-1 text-green-400 break-all">
-                            ComfyUI/custom_nodes/small0_translator/__init__.py
-                        </code>
-                        <p className="opacity-80 mt-1">Paste the Python code into that file.</p>
+                        <h3 className="text-white font-bold mb-1">2. Install in ComfyUI</h3>
+                        <p className="opacity-80">Use <strong>ComfyUI Manager</strong> -> <strong>Install via Git URL</strong> and paste your repo link.</p>
+                        <p className="opacity-80 mt-2">Or manually clone into <code className="text-neutral-500">custom_nodes/</code>.</p>
                     </div>
 
                     <div>
-                        <h3 className="text-white font-bold mb-1">3. Requirements</h3>
-                        <p className="opacity-80">You need the Google GenAI library in your ComfyUI python environment:</p>
-                         <code className="block bg-black/50 p-2 rounded mt-1 text-yellow-400 break-all">
-                            pip install google-generativeai
-                        </code>
-                    </div>
-
-                    <div>
-                        <h3 className="text-white font-bold mb-1">4. API Key Setup</h3>
-                        <p className="opacity-80">Set the environment variable `GEMINI_API_KEY` in your system or launch script.</p>
+                        <h3 className="text-white font-bold mb-1">3. API Key</h3>
+                        <p className="opacity-80">Set the environment variable <code className="text-yellow-400">GEMINI_API_KEY</code> on your system.</p>
+                        <p className="opacity-60 text-[10px] mt-1">Alternatively, create a file named <code className="text-neutral-400">gemini_api_key.txt</code> inside the node folder with your key.</p>
                     </div>
                 </div>
             </div>

@@ -1,40 +1,47 @@
-# Small0 Quick Translator
+# Small0 Quick Translator (ComfyUI Node)
 
 A custom ComfyUI node powered by Google Gemini that translates and optimizes prompts for various Stable Diffusion checkpoints (SDXL, Pony, Flux, etc.).
 
+It features an "Intelligence Mode" where Gemini optimizes the Chinese translation structure based on the specific artistic style of the selected checkpoint (e.g., using tag-like structures for Pony/Anime models vs natural language for SDXL).
+
 ## Installation
 
-Since this is a custom node for ComfyUI, follow these steps to install it:
+### Method 1: ComfyUI Manager (Git URL)
+1.  Open ComfyUI Manager.
+2.  Click **Install via Git URL**.
+3.  Paste the repository URL for this project.
 
-1.  **Navigate to Custom Nodes Directory**:
-    Open your terminal or command prompt and navigate to your ComfyUI installation folder:
+### Method 2: Manual Clone
+1.  Navigate to your ComfyUI `custom_nodes` directory:
     ```bash
     cd ComfyUI/custom_nodes/
     ```
-
-2.  **Clone the Repository**:
-    Clone this node into the directory:
+2.  Clone the repo:
     ```bash
     git clone https://github.com/your-username/small0-quick-translator.git
     ```
+3.  Install dependencies:
+    ```bash
+    pip install -r small0-quick-translator/requirements.txt
+    ```
 
-3.  **Restart ComfyUI**:
-    Restart your ComfyUI server to load the new node.
+## API Key Setup
 
-## Configuration (API Key)
+This node requires a Google Gemini API Key. You can get one from [Google AI Studio](https://aistudio.google.com/).
 
-**No `.env` file is required.**
+### Option A: Environment Variable (Recommended)
+Set `GEMINI_API_KEY` in your system environment variables.
+*   **Windows (PowerShell)**: `$env:GEMINI_API_KEY="your_key_here"` (or set in System Properties)
+*   **Linux/Mac**: `export GEMINI_API_KEY="your_key_here"`
 
-This node is designed to use the system's environment variables for security.
-*   **Web/Cloud**: The API key is automatically injected via the platform.
-*   **Local ComfyUI**: Ensure you have your `GEMINI_API_KEY` set in your system environment variables or your main ComfyUI launch script. The node will detect it automatically.
+### Option B: Local File
+Create a file named `gemini_api_key.txt` inside the `small0-quick-translator` node folder and paste your API key inside it (plain text, no spaces).
 
-## Usage 
-
-1.  **Locate Node**: Right-click on the canvas -> `Small0` -> `Quick Translator`.
+## Usage
+1.  **Add Node**: Right-click canvas -> `Small0` -> `Quick Translator`.
 2.  **Inputs**:
-    *   `prompt`: Connect your English text or string primitive.
-    *   `checkpoint`: Select the target model type (e.g., Pony V6, SDXL).
-    *   `intelligence_mode`: Enable to let Gemini re-structure the tags/prose for the specific model. Disable for direct translation.
-3.  **Outputs**:
-    *   `string`: The translated and optimized Chinese prompt.
+    *   `text`: Connect your prompt (STRING).
+    *   `checkpoint`: Select target model (e.g., Pony V6, SDXL).
+    *   `intelligence_mode`: 
+        *   `True`: Gemini restructures the prompt for the model.
+        *   `False`: Direct literal translation.
