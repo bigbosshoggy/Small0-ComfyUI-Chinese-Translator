@@ -213,7 +213,7 @@ class Small0Translator:
                     <div>
                         <h3 className="text-white font-bold mb-1">2. Install in ComfyUI</h3>
                         <p className="opacity-80">Use <strong>ComfyUI Manager</strong> -> <strong>Install via Git URL</strong> and paste your repo link:</p>
-                        <p className="opacity-80 mt-2 text-cyan-400 break-all">https://github.com/bigbosshoggy/small0-quick-translator</p>
+                        <p className="opacity-80 mt-2 text-cyan-400 break-all">https://github.com/bigbosshoggy/Small0-ComfyUI-Chinese-Translator</p>
                     </div>
 
                     <div>

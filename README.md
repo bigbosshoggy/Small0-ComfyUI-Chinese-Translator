@@ -9,7 +9,7 @@ It features an "Intelligence Mode" where Gemini optimizes the Chinese translatio
 ### Method 1: ComfyUI Manager (Git URL)
 1.  Open ComfyUI Manager.
 2.  Click **Install via Git URL**.
-3.  Paste the repository URL: `https://github.com/bigbosshoggy/small0-quick-translator`
+3.  Paste the repository URL: `https://github.com/bigbosshoggy/Small0-ComfyUI-Chinese-Translator`
 
 ### Method 2: Manual Clone
 1.  Navigate to your ComfyUI `custom_nodes` directory:
@@ -18,11 +18,11 @@ It features an "Intelligence Mode" where Gemini optimizes the Chinese translatio
     ```
 2.  Clone the repo:
     ```bash
-    git clone https://github.com/bigbosshoggy/small0-quick-translator.git
+    git clone https://github.com/bigbosshoggy/Small0-ComfyUI-Chinese-Translator.git
     ```
 3.  Install dependencies:
     ```bash
-    pip install -r small0-quick-translator/requirements.txt
+    pip install -r Small0-ComfyUI-Chinese-Translator/requirements.txt
     ```
 
 ## Usage
