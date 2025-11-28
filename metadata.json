@@ -1,0 +1,5 @@
+{
+  "name": "Small0 Quick Translator",
+  "description": "A ComfyUI-styled utility node powered by Gemini. Translates and optimizes prompts from English to Chinese with checkpoint awareness.",
+  "requestFramePermissions": []
+}
