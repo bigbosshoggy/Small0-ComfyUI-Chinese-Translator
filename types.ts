@@ -4,7 +4,8 @@ export enum CheckpointType {
   FLUX = 'Flux.1 Dev/Schnell',
   PONY = 'Pony Diffusion V6 (Anime)',
   REALISTIC = 'Realistic Vision / Photo',
-  ILLUSTRATION = 'Flat Illustration / Vector'
+  ILLUSTRATION = 'Flat Illustration / Vector',
+  Z_IMAGE_TURBO = 'Z-Image-Turbo (Tongyi-MAI)'
 }
 
 export interface TranslationRequest {

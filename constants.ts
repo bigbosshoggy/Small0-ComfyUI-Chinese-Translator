@@ -1,6 +1,7 @@
 import { CheckpointType } from './types';
 
 export const CHECKPOINTS = [
+  { value: CheckpointType.Z_IMAGE_TURBO, label: 'Z-Image-Turbo (Tongyi-MAI)' },
   { value: CheckpointType.SD15, label: 'Stable Diffusion 1.5' },
   { value: CheckpointType.SDXL, label: 'SDXL 1.0 / Lightning' },
   { value: CheckpointType.FLUX, label: 'Flux.1 Dev/Schnell' },
