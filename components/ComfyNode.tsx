@@ -212,14 +212,13 @@ class Small0Translator:
 
                     <div>
                         <h3 className="text-white font-bold mb-1">2. Install in ComfyUI</h3>
-                        <p className="opacity-80">Use <strong>ComfyUI Manager</strong> -> <strong>Install via Git URL</strong> and paste your repo link.</p>
-                        <p className="opacity-80 mt-2">Or manually clone into <code className="text-neutral-500">custom_nodes/</code>.</p>
+                        <p className="opacity-80">Use <strong>ComfyUI Manager</strong> -> <strong>Install via Git URL</strong> and paste your repo link:</p>
+                        <p className="opacity-80 mt-2 text-cyan-400 break-all">https://github.com/bigbosshoggy/small0-quick-translator</p>
                     </div>
 
                     <div>
                         <h3 className="text-white font-bold mb-1">3. API Key</h3>
-                        <p className="opacity-80">Set the environment variable <code className="text-yellow-400">GEMINI_API_KEY</code> on your system.</p>
-                        <p className="opacity-60 text-[10px] mt-1">Alternatively, create a file named <code className="text-neutral-400">gemini_api_key.txt</code> inside the node folder with your key.</p>
+                        <p className="opacity-80">Enter your Gemini API Key directly into the <code className="text-yellow-400">api_key</code> widget on the node.</p>
                     </div>
                 </div>
             </div>
