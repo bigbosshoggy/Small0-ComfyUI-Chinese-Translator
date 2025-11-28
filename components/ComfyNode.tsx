@@ -41,14 +41,48 @@ export const ComfyNode: React.FC = () => {
   };
 
   const pythonCode = `
-# This code is available in the __init__.py file in this repository.
-
-import os
 import google.generativeai as genai
 
 class Small0Translator:
-    # ... implementation details ...
-    pass
+    @classmethod
+    def INPUT_TYPES(s):
+        return {
+            "required": {
+                "api_key": ("STRING", {"multiline": False, "default": ""}),
+                "text": ("STRING", {"multiline": True, "default": ""}),
+                "checkpoint": ([
+                    "Z-Image-Turbo (Tongyi-MAI)",
+                    "Stable Diffusion 1.5",
+                    "SDXL 1.0/Lightning",
+                    "Flux.1 Dev/Schnell",
+                    "Pony Diffusion V6 (Anime)",
+                    "Realistic Vision / Photo",
+                    "Flat Illustration / Vector"
+                ],),
+                "intelligence_mode": ("BOOLEAN", {"default": True}),
+            },
+        }
+
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("translated_prompt",)
+    FUNCTION = "translate"
+    CATEGORY = "Small0"
+
+    def translate(self, api_key, text, checkpoint, intelligence_mode):
+        if not api_key:
+            return ("Error: API Key is missing",)
+        
+        try:
+            genai.configure(api_key=api_key)
+            # ... prompt engineering logic ...
+            model = genai.GenerativeModel('gemini-2.5-flash', system_instruction=...)
+            response = model.generate_content(text)
+            return (response.text.strip(),)
+        except Exception as e:
+            return (f"Error: {str(e)}",)
+
+NODE_CLASS_MAPPINGS = { "Small0Translator": Small0Translator }
+NODE_DISPLAY_NAME_MAPPINGS = { "Small0Translator": "Small0 Quick Translator" }
 `.trim();
 
   return (
@@ -61,6 +95,13 @@ class Small0Translator:
             <span className="font-bold text-sm text-white tracking-wide">Small0 Quick Translator</span>
         </div>
         <div className="flex gap-2 items-center">
+             <button 
+               onClick={() => setShowCode(true)}
+               className="text-white/50 hover:text-white transition-colors"
+               title="View Python Code"
+             >
+               <Code size={14} />
+             </button>
              <div className="w-px h-3 bg-white/20"></div>
              <button 
                onClick={() => setShowHelp(true)}
@@ -118,6 +159,9 @@ class Small0Translator:
                         <CheckCircle2 size={10} className="text-green-500" />
                     </div>
                 </div>
+                <p className="text-[9px] text-neutral-600 mt-0.5 ml-0.5">
+                   * Key is managed internally by the node
+                </p>
             </div>
 
             <div className="h-px bg-white/5 my-0.5"></div>
@@ -194,7 +238,7 @@ class Small0Translator:
 
         {/* Help Modal */}
         {showHelp && (
-            <div className="absolute inset-0 z-50 bg-[#121212]/95 flex flex-col text-gray-300 font-mono text-xs p-4 overflow-y-auto">
+            <div className="absolute inset-0 z-50 bg-[#121212]/95 flex flex-col text-gray-300 font-mono text-xs p-4 overflow-y-auto animate-in slide-in-from-right-10">
                 <div className="flex justify-between items-center mb-4 border-b border-gray-700 pb-2">
                     <div className="flex items-center gap-2 text-white font-bold">
                         <Terminal size={14} />
@@ -206,13 +250,13 @@ class Small0Translator:
                 <div className="space-y-4">
                     <div>
                         <h3 className="text-white font-bold mb-1">1. Push to Git</h3>
-                        <p className="opacity-80">This project already contains <code className="text-green-400">__init__.py</code> and <code className="text-green-400">requirements.txt</code>.</p>
-                        <p className="opacity-80 mt-1">Push all files in this directory to your GitHub repository.</p>
+                        <p className="opacity-80">This project must contain <code className="text-green-400">__init__.py</code> and <code className="text-green-400">requirements.txt</code> in the root.</p>
+                        <p className="opacity-80 mt-1">Push files to your GitHub repository.</p>
                     </div>
 
                     <div>
                         <h3 className="text-white font-bold mb-1">2. Install in ComfyUI</h3>
-                        <p className="opacity-80">Use <strong>ComfyUI Manager</strong> -> <strong>Install via Git URL</strong> and paste your repo link:</p>
+                        <p className="opacity-80">Use <strong>ComfyUI Manager</strong> -> <strong>Install via Git URL</strong> and paste:</p>
                         <p className="opacity-80 mt-2 text-cyan-400 break-all">https://github.com/bigbosshoggy/Small0-ComfyUI-Chinese-Translator</p>
                     </div>
 
@@ -220,6 +264,38 @@ class Small0Translator:
                         <h3 className="text-white font-bold mb-1">3. API Key</h3>
                         <p className="opacity-80">Enter your Gemini API Key directly into the <code className="text-yellow-400">api_key</code> widget on the node.</p>
                     </div>
+                    
+                    <div className="bg-red-900/20 p-2 border border-red-900/50 rounded text-red-200">
+                        <p><strong>Troubleshooting:</strong> If node doesn't appear, check ComfyUI console for: <code className="text-xs">ModuleNotFoundError: No module named 'google.generativeai'</code>. Run <code className="text-xs">pip install -r requirements.txt</code> in your ComfyUI python env.</p>
+                    </div>
+                </div>
+            </div>
+        )}
+
+        {/* Code View Modal */}
+        {showCode && (
+            <div className="absolute inset-0 z-50 bg-[#121212] flex flex-col text-gray-300 font-mono text-xs overflow-hidden animate-in slide-in-from-bottom-10">
+                <div className="flex justify-between items-center p-3 border-b border-gray-700 bg-[#1a1a1a]">
+                    <div className="flex items-center gap-2 text-white font-bold">
+                        <Code size={14} />
+                        <span>PYTHON SOURCE (__init__.py)</span>
+                    </div>
+                    <div className="flex gap-2">
+                         <button 
+                            onClick={copyCodeToClipboard} 
+                            className="flex items-center gap-1 text-green-500 hover:text-green-400"
+                         >
+                            {copiedCode ? <Check size={14} /> : <Copy size={14} />}
+                            {copiedCode ? "Copied" : "Copy"}
+                         </button>
+                        <div className="w-px h-4 bg-gray-700"></div>
+                        <button onClick={() => setShowCode(false)} className="hover:text-white"><X size={16} /></button>
+                    </div>
+                </div>
+                <div className="flex-1 overflow-auto p-4 bg-[#0d0d0d]">
+                    <pre className="text-green-400/90 whitespace-pre-wrap font-mono text-[10px] leading-relaxed">
+                        {pythonCode}
+                    </pre>
                 </div>
             </div>
         )}
